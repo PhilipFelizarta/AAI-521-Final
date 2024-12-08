@@ -19,7 +19,7 @@ def prepare_dataset(directory):
 
 		# Collect all .jpg files in the directory
 		for file in os.listdir(label_path):
-			if file.endswith('.jpg'):  # Filter .jpg files
+			if file.lower().endswith('.jpg'):  # Filter .jpg files
 				file_paths.append(os.path.join(label_path, file))
 				labels.append(label_dir)  # Folder name is the label
 
