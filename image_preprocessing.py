@@ -19,7 +19,7 @@ def prepare_dataset(directory):
 
 		# Collect all .jpg files in the directory
 		for file in os.listdir(label_path):
-			if file.endswith('.jpg'):  # Filter .jpg files
+			if file.lower().endswith('.jpg'):  # Filter .jpg files
 				file_paths.append(os.path.join(label_path, file))
 				labels.append(label_dir)  # Folder name is the label
 
@@ -55,15 +55,19 @@ def load_images_and_labels(dataframe, target_size=(128, 128)):
 	# Convert to NumPy arrays
 	return np.array(image_arrays), np.array(labels)
 
-def create_numpy_dataset(directory, target_size=(128,128)):
+def create_numpy_dataset(directory, label_encoder=None, target_size=(128, 128)):
+	# Prepare the dataset
 	df = prepare_dataset(directory)
 
+	# Load images and labels
 	examples, labels = load_images_and_labels(df, target_size=target_size)
 
-	# Encode string labels as integers
-	label_encoder = LabelEncoder()
-	encoded_labels = label_encoder.fit_transform(labels)
+	# If no label encoder is provided, create and fit one
+	if label_encoder is None:
+		label_encoder = LabelEncoder()
+		label_encoder.fit(labels)  # Fit on the labels of the training dataset
 
-	# Check the mapping
-	print("Classes:", label_encoder.classes_)
+	# Encode labels using the provided or newly created label_encoder
+	encoded_labels = label_encoder.transform(labels)
+
 	return examples, encoded_labels, label_encoder
