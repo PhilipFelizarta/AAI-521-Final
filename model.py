@@ -34,8 +34,6 @@ def plant_cnn(input_shape, num_classes, num_hidden_layers, dropout_rate=0.5):
 		x = layers.Dropout(dropout_rate)(x)
 	
 	x = layers.GlobalAveragePooling2D()(x)
-	x = layers.Dense(64, activation='relu')(x)
-	x = layers.Dropout(dropout_rate)(x)
 	outputs = layers.Dense(num_classes, activation='softmax')(x)
 	
 	model = tf.keras.Model(inputs=inputs, outputs=outputs)
@@ -89,7 +87,7 @@ def plant_resnet(input_shape, num_classes, num_residual_blocks, dropout_rate=0.5
 
 	# Global Average Pooling
 	x = layers.GlobalAveragePooling2D()(x)
-	
+
 	# Output Layer
 	outputs = layers.Dense(num_classes, activation='softmax')(x)
 
